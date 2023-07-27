@@ -25,6 +25,32 @@ select * from tbl_board where bno <![CDATA[>]]> 0
 <select id="read" resultType="org.zerock.domain.BoardVO">
 	select * from tbl_board where bno = #{bno}
 </select>
+
+<select id="getTotalCount" resultType="int">
+	select count(*) from tbl_board where
+	<include refid="criteria"></include>
+	bno>0
+</select>
+<sql id="criteria">
+	<trim prefix="(" suffix=") AND " prefixOverrides="OR">
+		<foreach item='type' collection = "typeArr">
+			<trim prefix="OR">
+				<choose>
+					<when test="type=='T'.toString()" >
+						title like '%'||#{keyword}||'%'
+					</when>
+					<when test="type=='C'.toString()">
+						content like '%'||#{keyword}||'%'
+					</when>
+					<when test= "type=='W'.toString()">
+						writer like '%'||#{keyword}||'%'
+					</when>
+				</choose>
+			</trim>
+		</foreach>
+	</trim>
+</sql>
+
 <select id="getListWithPaging" resultType="org.zerock.domain.BoardVO">
 	
 	select 
@@ -35,13 +61,12 @@ select * from tbl_board where bno <![CDATA[>]]> 0
 			rownum rn, bno, title, content, writer, regdate, updatedate
 		from
 			tbl_board
-		where rownum <![CDATA[<]]>= #{pageNum} * #{amount}
+		where
+		<include refid = "criteria"></include>
+		 rownum <![CDATA[<]]>= #{pageNum} * #{amount}
 		)
 	where rn<![CDATA[>]]> (#{pageNum} -1) * #{amount}
 	
-</select>
-<select id="getTotalCount" resultType="int">
-	select count(*) from tbl_board where bno>0
 </select>
 <delete id="delete">
 delete from tbl_board where bno = #{bno}
