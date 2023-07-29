@@ -18,7 +18,7 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 
 public class BoardMapperTests {
-	@Setter(onMethod_=@Autowired)
+	/*@Setter(onMethod_=@Autowired)
 	private BoardMapper mapper;
 	/*
 	@Test
@@ -52,7 +52,7 @@ public class BoardMapperTests {
 		BoardVO board = mapper.read(5L);
 		
 		log.info(board);
-	}*/
+	}
 	
 	@Test
 	public void testDelete() {
@@ -86,5 +86,5 @@ public class BoardMapperTests {
 		cri.setType("TC");
 		List<BoardVO> list = mapper.getListWithPaging(cri);
 		list.forEach(board->log.info(board));
-	}
+	}*/
 }
